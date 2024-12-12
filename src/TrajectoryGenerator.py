@@ -32,10 +32,10 @@ def TrajectoryGenerator(Tse_initial, Tsc_initial, Tsc_final, Tce_grasp, Tce_stan
     full_traj = []
 
     # Time Configurations for Trajectories
-    T1 = 2          # Time Config for First Long Motion
+    T1 = 5          # Time Config for First Long Motion
     TL = 1          # Time Config for Linear Standoff Motion
-    TG = 0.63       # Time Config for Grasping Motion
-    T2 = 5          # Time Config for Second Long Motion
+    TG = 0.67     # Time Config for Grasping Motion
+    T2 = 7          # Time Config for Second Long Motion
 
     # Time Scaling Method
     m = 3
@@ -62,5 +62,6 @@ def TrajectoryGenerator(Tse_initial, Tsc_initial, Tsc_final, Tce_grasp, Tce_stan
             r3_3 = out[2][:3]
             full_traj.append([*r1_3 ,*r2_3 ,*r3_3 ,out[0][3] ,out[1][3] ,out[2][3] ,g])
 
+    print("Trajectories Generated")
     return full_traj
 

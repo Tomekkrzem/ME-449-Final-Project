@@ -2,14 +2,36 @@ import modern_robotics as mr
 import numpy as np
 from numpy import sin, cos
 
-def NextState(curr_config, rate_vect, dt, v_lim):
-    # INITIALIZATION OF NECESSARY COMPONENTS
-    # Initializes Chassis Configuration
+def NextState(curr_config: np.ndarray, rate_vect: np.ndarray, dt: float, v_lim: int) -> np.ndarray:
+    """
+    :param curr_config: 12-Vector Representation of the Current Robot Configuration
+        [0:3]: Chassis Configuration Variables (phi, x, y)
+        [3:8]: Arm Configuration Variables (theta)
+        [8:12]: Wheel Configuration Variables (wheel_ang)
+    :param rate_vect: 9-Vector Representation of Current Wheel and Joint Speeds
+        [0:4]: Wheel Speeds (u)
+        [4:8] Joint Angle Speeds (theta_dot)
+    :param dt: The Timestep of the Simulation
+    :param v_lim: The Joint Velocity Limit
+
+    :return: next_state: 12-Vector Representation of the Next State Robot Configuration
+
+    Example Input:
+        curr_config = np.array([0,0,0,0,0,0,0,0,0,0,0,0])
+        rate_vect = np.array([10,10,10,10,0,0,0,0,0])
+        dt = 0.01
+        v_lim = 10
+
+    Output:
+        np.array([0.0, 0.00475, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.1])
+    """
+    # Chassis Configuration
     curr_chassis_conf = curr_config[0:3]
 
-    # Initializes Joint Angles and Joint Speeds
+    # Joint Angles and Joint Speeds
     curr_arm_conf, curr_arm_speed = [curr_config[3:8], rate_vect[4:]]
-    # Initializes Wheel Angles and Wheel Speeds
+
+    # Wheel Angles and Wheel Speeds
     curr_wheel_conf, curr_wheel_speed = [curr_config[8:], rate_vect[0:4]]
 
     # Velocity Control. The Lambda Function Ensures Wheel Speeds are Within Range
@@ -17,15 +39,8 @@ def NextState(curr_config, rate_vect, dt, v_lim):
     curr_wheel_speed = v_control(curr_wheel_speed,v_lim)
     curr_arm_speed = v_control(curr_arm_speed,v_lim)
 
-
     # Chassis Configuration Variables
     phi, x, y = curr_chassis_conf
-
-    # Configuration of Mobile Base in Space Frame
-    Tsb = np.array([[cos(phi), -sin(phi), 0, x],
-                    [sin(phi), cos(phi), 0, y],
-                    [0, 0, 1, 0.0963],
-                    [0, 0, 0, 1]])
 
     # Initialize F for Odometry Calculation
     l = 0.235
@@ -45,32 +60,36 @@ def NextState(curr_config, rate_vect, dt, v_lim):
     next_wheel_conf = curr_wheel_conf + curr_wheel_speed * dt
 
     # Calculating Change in Wheel Angle
-    delta_wheel_conf = next_wheel_conf - curr_wheel_conf
+    delta_wheel_conf = curr_wheel_speed * dt
 
     # Calculating the Body Twist
-    body_twist = np.matmul(F, delta_wheel_conf)
+    Vb = np.matmul(F, delta_wheel_conf)
 
-    # Calculating the Planar Twist
-    planar_twist = np.array([0,0,*body_twist,0])
 
-    # Calculating the Next Body Frame Relative to Initial Body Frame
-    Tbb_prime = mr.MatrixExp6(mr.VecTose3(planar_twist))
+    wbz, xb, yb = Vb
 
-    # Calculating the Next Body Frame Relative to the Space Frame
-    Tsb_prime = np.matmul(Tsb,Tbb_prime)
+    if wbz == 0:
+        dt_qb = np.array([0, xb, yb])
+    else:
+        dt_qb = np.array([wbz,
+                          (xb*sin(wbz) + yb*(cos(wbz)-1))/wbz,
+                          (yb*sin(wbz) + xb*(1-cos(wbz)))/wbz])
 
-    # Calculating the Spatial Twist
-    Vsb = mr.se3ToVec(mr.MatrixLog6(Tsb_prime))
+    chassis_rot = np.array([[1,          0,           0],
+                            [0,   cos(phi),   -sin(phi)],
+                            [0,   sin(phi),    cos(phi)]])
+
+    delta_chassis_conf = np.matmul(chassis_rot,dt_qb)
+
 
     # Determining Next Chassis Configuration Variables
-    next_chassis_conf = Vsb[2:5]
+    next_chassis_conf = curr_chassis_conf + delta_chassis_conf
+
 
     # Creating 12-Vector Representing the Next Configuration
-    next_state = [*next_chassis_conf.tolist(),
+    next_state = np.array([*next_chassis_conf.tolist(),
                   *next_arm_conf.tolist(),
-                  *next_wheel_conf.tolist()]
-
+                  *next_wheel_conf.tolist()])
 
     return next_state
-
 
