@@ -10,7 +10,7 @@ def TrajectoryGenerator(Tse_initial, Tsc_initial, Tsc_final, Tce_grasp, Tce_stan
     :param Tsc_final: Final Configuration of Cube in Space Frame
     :param Tce_grasp: Position of End Effector Relative to the Cube During Grasping
     :param Tce_standoff: Position of End Effector Relative to the Cube at Stand Off Position
-    :param k:
+    :param k: Simulation Frequency
 
     :return: [N x [r11,r12,r13,r21,r22,r23,r31,r32,r33,px,py,pz,g]]
                 N x 13 Matrix Representing End Effector Position
