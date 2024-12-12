@@ -1,0 +1,43 @@
+C:\Users\tomek\AppData\Local\Programs\Python\Python312\python.exe "C:\Users\tomek\PycharmProjects\ME 449 Final Project\code\main.py"
+Input Configuration for Best Simulation:
+Tse: [[ 0.   0.   1.   0. ]
+ [ 0.   1.   0.   0. ]
+ [-1.   0.   0.   0.5]
+ [ 0.   0.   0.   1. ]]
+M0e: [[1.     0.     0.     0.033 ]
+ [0.     1.     0.     0.    ]
+ [0.     0.     1.     0.6546]
+ [0.     0.     0.     1.    ]]
+Tb0: [[1.     0.     0.     0.1662]
+ [0.     1.     0.     0.    ]
+ [0.     0.     1.     0.0026]
+ [0.     0.     0.     1.    ]]
+B_list: [[ 0.      0.      0.      0.      0.    ]
+ [ 0.     -1.     -1.     -1.      0.    ]
+ [ 1.      0.      0.      0.      1.    ]
+ [ 0.     -0.5076 -0.3526 -0.2176  0.    ]
+ [ 0.033   0.      0.      0.      0.    ]
+ [ 0.      0.      0.      0.      0.    ]]
+F: [[-0.03084416  0.03084416  0.03084416 -0.03084416]
+ [ 0.011875    0.011875    0.011875    0.011875  ]
+ [-0.011875    0.011875   -0.011875    0.011875  ]]
+Robot Configuration: [ 0.4 -0.4 -0.2  0.   0.   1.  -1.8  0.   0.   0.   0.   0. ]
+Time Step (dt): 0.01
+Kp: 30
+Ki: 0.2
+Velocity Limits (v_lim): 15
+
+100%|██████████| 400/400 [00:00<?, ?it/s]
+100%|██████████| 125/125 [00:00<?, ?it/s]
+100%|██████████| 50/50 [00:00<?, ?it/s]
+100%|██████████| 125/125 [00:00<?, ?it/s]
+100%|██████████| 700/700 [00:00<?, ?it/s]
+100%|██████████| 125/125 [00:00<?, ?it/s]
+100%|██████████| 50/50 [00:00<?, ?it/s]
+100%|██████████| 125/125 [00:00<?, ?it/s]
+Trajectories Generated
+File best.csv was Generated
+File X_err_best.csv was Generated
+Plot best.pdf was Generated
+
+Process finished with exit code 0

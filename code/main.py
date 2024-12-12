@@ -72,8 +72,8 @@ def main(Mse,M0e,Tb0,B_list,F,r_conf,dt,Kp,Ki,err_arr,v_lim,file_name,traj_confi
     df.to_csv(str(file_path) + str(file_name) + '.csv', index=False, header=False)
     df2.to_csv(str(file_path) + 'X_err_' + str(file_name) + '.csv', index=False, header=False)
 
-    print(f"File {file_name} was Generated")
-    print(f"File X_err_{file_name} was Generated")
+    print(f"File {file_name}.csv was Generated")
+    print(f"File X_err_{file_name}.csv was Generated")
 
     fig, ax = plt.subplots()
     ax.plot(np.linspace(0, len(err_arr)/100, len(err_arr)),err_arr)
@@ -83,9 +83,45 @@ def main(Mse,M0e,Tb0,B_list,F,r_conf,dt,Kp,Ki,err_arr,v_lim,file_name,traj_confi
     ax.legend([r'$X_{Err1}$',r'$X_{Err2}$',r'$X_{Err3}$',r'$X_{Err4}$',r'$X_{Err5}$',r'$X_{Err6}$'])
     plt.savefig(f'{file_path}{file_name}.pdf')
 
+    print(f"Plot {file_name}.pdf was Generated")
+
 if __name__ == "__main__":
     # Running Solutions with Configuration from Config File
+    print("Input Configuration for Best Simulation: \n"
+          f"Tse: {conf_best()[0]}\n"
+          f"M0e: {conf_best()[1]}\n"
+          f"Tb0: {conf_best()[2]}\n"
+          f"B_list: {conf_best()[3]}\n"
+          f"F: {conf_best()[4]}\n"
+          f"Robot Configuration: {conf_best()[5]}\n"
+          f"Time Step (dt): {conf_best()[6]}\n"
+          f"Kp: {conf_best()[7]}\n"
+          f"Ki: {conf_best()[8]}\n"
+          f"Velocity Limits (v_lim): {conf_best()[10]}\n")
     main(*conf_best(),'best',conf_t_best())
+
+    print("Input Configuration for Overshoot Simulation: \n"
+          f"Tse: {conf_overshoot()[0]}\n"
+          f"M0e: {conf_overshoot()[1]}\n"
+          f"Tb0: {conf_overshoot()[2]}\n"
+          f"B_list: {conf_overshoot()[3]}\n"
+          f"F: {conf_overshoot()[4]}\n"
+          f"Robot Configuration: {conf_overshoot()[5]}\n"
+          f"Time Step (dt): {conf_overshoot()[6]}\n"
+          f"Kp: {conf_overshoot()[7]}\n"
+          f"Ki: {conf_overshoot()[8]}\n"
+          f"Velocity Limits (v_lim): {conf_overshoot()[10]}\n")
     main(*conf_overshoot(), 'overshoot', conf_t_overshoot())
+
+    print("Input Configuration for New Task Simulation: \n"
+          f"Tse: {conf_newTask()[0]}\n"
+          f"M0e: {conf_newTask()[1]}\n"
+          f"Tb0: {conf_newTask()[2]}\n"
+          f"B_list: {conf_newTask()[3]}\n"
+          f"F: {conf_newTask()[4]}\n"
+          f"Robot Configuration: {conf_newTask()[5]}\n"
+          f"Time Step (dt): {conf_newTask()[6]}\n"
+          f"Kp: {conf_newTask()[7]}\n"
+          f"Ki: {conf_newTask()[8]}\n"
+          f"Velocity Limits (v_lim): {conf_newTask()[10]}\n")
     main(*conf_newTask(), 'newTask', conf_t_newTask())
-    plt.show()
