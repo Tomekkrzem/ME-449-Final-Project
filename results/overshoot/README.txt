@@ -1,7 +1,7 @@
 The Controller used in this Simulation was a Feedforward-Plus-PI (Proportional Integral) Controller.
 
-Kp = 30
-Ki = 0.2
+Kp = 3
+Ki = 3.01
 
 Timestep:
 dt = 0.01
