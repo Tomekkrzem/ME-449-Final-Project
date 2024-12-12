@@ -65,9 +65,10 @@ def NextState(curr_config: np.ndarray, rate_vect: np.ndarray, dt: float, v_lim: 
     # Calculating the Body Twist
     Vb = np.matmul(F, delta_wheel_conf)
 
-
+    # Obtaining Velocities
     wbz, xb, yb = Vb
 
+    # Determining Chassis Motion
     if wbz == 0:
         dt_qb = np.array([0, xb, yb])
     else:
@@ -75,16 +76,16 @@ def NextState(curr_config: np.ndarray, rate_vect: np.ndarray, dt: float, v_lim: 
                           (xb*sin(wbz) + yb*(cos(wbz)-1))/wbz,
                           (yb*sin(wbz) + xb*(1-cos(wbz)))/wbz])
 
+    # Chassis Rotation Matrix
     chassis_rot = np.array([[1,          0,           0],
                             [0,   cos(phi),   -sin(phi)],
                             [0,   sin(phi),    cos(phi)]])
 
+    # Delta Chassis Configuration
     delta_chassis_conf = np.matmul(chassis_rot,dt_qb)
-
 
     # Determining Next Chassis Configuration Variables
     next_chassis_conf = curr_chassis_conf + delta_chassis_conf
-
 
     # Creating 12-Vector Representing the Next Configuration
     next_state = np.array([*next_chassis_conf.tolist(),

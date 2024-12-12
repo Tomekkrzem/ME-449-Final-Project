@@ -4,18 +4,17 @@ from tqdm import tqdm
 
 def TrajectoryGenerator(Tse_initial, Tsc_initial, Tsc_final, Tce_grasp, Tce_standoff, k):
 
-    # Parameters:
-    # Tse_init = Initial Configuration of End Effector in Space Frame
-    # Tsc_init = Initial Configuration of Cube in Space Frame
-    # Tsc_fin = Final Configuration of Cube in Space Frame
-    # Tce_grasp = Position of End Effector Relative to the Cube During Grasping
-    # Tce_standoff = Position of End Effector Relative to the Cube at Stand Off Position
+    """
+    :param Tse_initial: Initial Configuration of End Effector in Space Frame
+    :param Tsc_initial: Initial Configuration of Cube in Space Frame
+    :param Tsc_final: Final Configuration of Cube in Space Frame
+    :param Tce_grasp: Position of End Effector Relative to the Cube During Grasping
+    :param Tce_standoff: Position of End Effector Relative to the Cube at Stand Off Position
+    :param k:
 
-    # Output:
-    # full_traj = N x 13 Matrix Representing End Effector Position
-    #
-    #           = [r11,r12,r13,r21,r22,r23,r31,r32,r33,px,py,pz,g]
-    #
+    :return: [N x [r11,r12,r13,r21,r22,r23,r31,r32,r33,px,py,pz,g]]
+                N x 13 Matrix Representing End Effector Position
+    """
 
     # Time Step
     dt = 0.01
@@ -32,9 +31,9 @@ def TrajectoryGenerator(Tse_initial, Tsc_initial, Tsc_final, Tce_grasp, Tce_stan
     full_traj = []
 
     # Time Configurations for Trajectories
-    T1 = 5          # Time Config for First Long Motion
-    TL = 1          # Time Config for Linear Standoff Motion
-    TG = 0.67     # Time Config for Grasping Motion
+    T1 = 4          # Time Config for First Long Motion
+    TL = 1.25          # Time Config for Linear Standoff Motion
+    TG = 0.5    # Time Config for Grasping Motion
     T2 = 7          # Time Config for Second Long Motion
 
     # Time Scaling Method

@@ -1,11 +1,10 @@
-from src.TrajectoryGenerator import TrajectoryGenerator
-from config.init_traj import conf_t
-import numpy as np
+from code.src.TrajectoryGenerator import TrajectoryGenerator
+from code.config import conf_t_best
 import pandas as pd
 
 def main():
     # Complete Trajectory Generated Using TrajectoryGenerator
-    t = TrajectoryGenerator(*conf_t())
+    t = TrajectoryGenerator(*conf_t_best())
 
     # Code Used to Generate CSV Files
     df = pd.DataFrame(t)

@@ -1,4 +1,4 @@
-from src.NextState import NextState
+from code.src.NextState import NextState
 import numpy as np
 import pandas as pd
 from numpy import cos, sin
@@ -6,7 +6,7 @@ from numpy import cos, sin
 def main():
     # Initial Configuration
     init_conf = np.array([0,0,0,0,0,0,0,0,0,0,0,0])
-    # Constant Wheel Speeds and Joint Speeds
+    # Constant Wheel Speeds and Joint Speeds (Spin in Place)
     const_control1 = np.array([-10,10,10,-10,0,0,0,0,0])
     # Time Step
     dt = 0.01

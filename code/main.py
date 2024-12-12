@@ -1,31 +1,22 @@
-from src import FeedbackControl, Velocities, NextState, TrajectoryGenerator
-from config import conf_t, conf
+from code.src import FeedbackControl, Velocities, NextState, TrajectoryGenerator
+from code.config import (conf_t_best, conf_t_overshoot, conf_t_newTask,
+                         conf_best, conf_overshoot, conf_newTask)
 from numpy import cos, sin
 import numpy as np
 import modern_robotics as mr
 import pandas as pd
+import matplotlib.pyplot as plt
 
-Mse = conf()[0]
-M0e = conf()[1]
-Tb0 = conf()[2]
-B_list = conf()[3]
-F = conf()[4]
-r_conf = conf()[5]
-dt = conf()[6]
+def main(Mse,M0e,Tb0,B_list,F,r_conf,dt,Kp,Ki,err_arr,v_lim,file_name,traj_config):
+    # Starting Error Integral
+    err_sum = np.array([0, 0, 0, 0, 0, 0], dtype='float64')
 
-J_lim = None
-
-Kp = 0
-Ki = 0
-err_sum = [np.array([0,0,0,0,0,0])]
-
-def main():
-    r_tj = TrajectoryGenerator(*conf_t())
-
+    r_tj = TrajectoryGenerator(*traj_config)
     # Vector of Trajectories
     state = r_conf
     traj = [[*r_conf.tolist(),0]]
 
+    # Loop Through all Trajectories
     for i in range(len(r_tj)-1):
 
         # Desired Frame
@@ -41,10 +32,12 @@ def main():
                            [           0,           0,            0,           1]])
 
         # Gripper State
-        g_state = r_tj[i][-1]
+        g_state = r_tj[i+1][-1]
 
+        # Chassis Configurations
         phi, x, y = state[0:3]
 
+        # Updating Base Frame
         Tsb = np.array([[cos(phi), -sin(phi),    0,      x],
                         [sin(phi),  cos(phi),    0,      y],
                         [       0,         0,    1, 0.0963],
@@ -57,23 +50,21 @@ def main():
         X = np.matmul(Tsb,np.matmul(Tb0,T0e))
 
         # Commanded End Effector Twist
-        FC = FeedbackControl(X,Xd,Xd_next,Kp,Ki,dt,err_sum[i])
+        FC = FeedbackControl(X,Xd,Xd_next,Kp,Ki,dt,err_sum)
         V = FC[0]
-        err_sum.append(FC[1])
+        err_arr.append(FC[1])
 
         # Wheel and Joint Velocities
-        rates = Velocities(state[0:8],B_list,V,M0e,Tb0,F,J_lim,dt,15)
+        rates = Velocities(state,B_list,V,M0e,Tb0,F)
 
         # Current State Updates to Next State
-        state = NextState(state, rates, dt, 15)
+        state = NextState(state, rates, dt, v_lim)
 
         # Complete Robot Trajectory
         traj.append([*state, g_state])
 
     # Code Used to Generate CSV Files
     df = pd.DataFrame(traj)
-
-    file_name = 'testf'
 
     # CHANGE FILE PATH TO GENERATE CSV PROPERLY
     file_path = 'C:/Users/tomek/Downloads/School Work/ME 449/'
@@ -82,6 +73,16 @@ def main():
 
     print(f"File {file_name} was Generated")
 
+    fig, ax = plt.subplots()
+    ax.plot(np.linspace(0, 17, len(err_arr)),err_arr)
+    ax.set_title(f"{file_name.capitalize()} Arm Joint Errors")
+    ax.set_ylabel('Error')
+    ax.set_xlabel('Time')
+    ax.legend([r'$X_{Err1}$',r'$X_{Err2}$',r'$X_{Err3}$',r'$X_{Err4}$',r'$X_{Err5}$',r'$X_{Err6}$'])
 
 if __name__ == "__main__":
-    main()
+    # Running Solutions with Configuration from Config File
+    main(*conf_best(),'best',conf_t_best())
+    main(*conf_overshoot(), 'overshoot', conf_t_overshoot())
+    main(*conf_newTask(), 'newTask', conf_t_newTask())
+    plt.show()
