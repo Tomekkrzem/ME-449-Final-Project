@@ -8,9 +8,7 @@ The general procedure of the program is as follows:
 1. Generate trajectories based on cube configurations and the starting end-effector configuration.
 2. Iterate through the reference trajectories.
 3. Compute the feedforward control using the kinematic task-space feedforward plus feedback control law:
-   $$
-   {\mathcal {V}}(t) = [{\text{Ad}}_{X^{-1}X_{d}}]{\mathcal {V}}_{d}(t) + K_{p}X_{\text{err}}(t) + K_{i}\int_{0}^{t} X_{\text{err}}(t) \, dt
-   $$
+   ![image](https://github.com/user-attachments/assets/7cfbc2b9-8398-4d52-9c7b-821c8f941aba)
 4. Compute the next state configurations of the youBot.
 5. Generate all required output files (e.g., data logs, configuration files, etc.).
 
