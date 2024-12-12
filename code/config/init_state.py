@@ -96,7 +96,7 @@ def conf_overshoot():
                     [0,0,0,1]])
 
     # Initial Robot Configuration
-    R_config = np.array([0.6, 0.4, -0.5, 0, 0, 0.2, -2, 0, 0, 0, 0, 0])
+    R_config = np.array([0.1, -0.5, -0.5, 0, 1, 0, -1.2, 0, 0, 0, 0, 0])
 
     # Time Step
     dt = 0.01
@@ -104,13 +104,13 @@ def conf_overshoot():
     # Proportional Gain Value
     Kp = 3
     # Integral Gain Value
-    Ki = 3.1
+    Ki = 3.01
 
     # Array to Store Integral of the Error
     err_arr = []
 
     # Velocity Limit
-    v_lim = 25
+    v_lim = 12
 
     return [Tse, M0e, Tb0, B_list, F, R_config, dt, Kp, Ki, err_arr, v_lim]
 
@@ -153,13 +153,13 @@ def conf_newTask():
                     [0,0,0,1]])
 
     # Initial Robot Configuration
-    R_config = np.array([1.5, 0.7, -0.5, 0, 0, 0.3, -0.7, 0, 0, 0, 0, 0])
+    R_config = np.array([1.5, 0.8, 0.2, 0, 0, 0.3, -0.7, 0, 0, 0, 0, 0])
 
     # Time Step
     dt = 0.01
 
     # Proportional Gain Value
-    Kp = 5
+    Kp = 3
     # Integral Gain Value
     Ki = 0.1
 

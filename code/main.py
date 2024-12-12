@@ -65,20 +65,23 @@ def main(Mse,M0e,Tb0,B_list,F,r_conf,dt,Kp,Ki,err_arr,v_lim,file_name,traj_confi
 
     # Code Used to Generate CSV Files
     df = pd.DataFrame(traj)
+    df2 = pd.DataFrame(err_arr)
 
     # CHANGE FILE PATH TO GENERATE CSV PROPERLY
-    file_path = 'C:/Users/tomek/Downloads/School Work/ME 449/'
-
+    file_path = f'C:/Users/tomek/PycharmProjects/ME 449 Final Project/results/{file_name}/'
     df.to_csv(str(file_path) + str(file_name) + '.csv', index=False, header=False)
+    df2.to_csv(str(file_path) + 'X_err_' + str(file_name) + '.csv', index=False, header=False)
 
     print(f"File {file_name} was Generated")
+    print(f"File X_err_{file_name} was Generated")
 
     fig, ax = plt.subplots()
-    ax.plot(np.linspace(0, 17, len(err_arr)),err_arr)
+    ax.plot(np.linspace(0, len(err_arr)/100, len(err_arr)),err_arr)
     ax.set_title(f"{file_name.capitalize()} Arm Joint Errors")
     ax.set_ylabel('Error')
-    ax.set_xlabel('Time')
+    ax.set_xlabel('Time (s)')
     ax.legend([r'$X_{Err1}$',r'$X_{Err2}$',r'$X_{Err3}$',r'$X_{Err4}$',r'$X_{Err5}$',r'$X_{Err6}$'])
+    plt.savefig(f'{file_path}{file_name}.pdf')
 
 if __name__ == "__main__":
     # Running Solutions with Configuration from Config File
